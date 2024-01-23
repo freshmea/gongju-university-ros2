@@ -3,9 +3,9 @@ from rclpy.node import Node
 from std_msgs.msg import Header
 
 
-class T_pub(Node):
+class T_sub(Node):
     def __init__(self):
-        super().__init__('time_pub') #type: ignore
+        super().__init__('time_sub') #type: ignore
         self.pub = self.create_subscription(Header, 'time', self.sub_callback, 10)
         
     def sub_callback(self, msg: Header):
@@ -14,7 +14,7 @@ class T_pub(Node):
 
 def main():
     rclpy.init()
-    node = T_pub() #type: ignore
+    node = T_sub() #type: ignore
     try:
         rclpy.spin(node)
     except KeyboardInterrupt:
