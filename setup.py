@@ -21,7 +21,10 @@ setup(
     entry_points={
         'console_scripts': [
             'move_turtlesim = gongju_ros.move_turtlesim:main',
-            'move_turtlebot = gongju_ros.move_turtlebot:main'
+            'move_turtlebot = gongju_ros.move_turtlebot:main',
+            'simple_pub = gongju_ros.simple_pub:main',
+            'simple_sub = gongju_ros.simple_sub:main',
+            'simple_sub2 = gongju_ros.simple_sub2:main',
         ],
     },
 )
