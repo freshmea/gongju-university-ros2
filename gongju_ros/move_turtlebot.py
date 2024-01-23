@@ -48,13 +48,13 @@ def main():
     try:
         rclpy.spin(node)
     except KeyboardInterrupt:
-        node.destroy_node()
         # stop turtlebot3
         msg = Twist()
         msg.linear.x= 0.0
         msg.angular.z= 0.0
         for _ in range(10):
             node.pub.publish(msg)
+        node.destroy_node()
 
 if __name__ == '__main__':
     main()
