@@ -25,6 +25,8 @@ setup(
             'simple_pub = gongju_ros.simple_pub:main',
             'simple_sub = gongju_ros.simple_sub:main',
             'simple_sub2 = gongju_ros.simple_sub2:main',
+            'simeple_time_pub = gongju_ros.simple_time_pub:main',
+            'simeple_time_sub = gongju_ros.simple_time_sub:main',
         ],
     },
 )

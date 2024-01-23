@@ -10,11 +10,14 @@ class Move_turtle(Node):
         self.create_timer(0.1, self.pub_callback)
         self.create_timer(1/30, self.update_callback)
         self.pub = self.create_publisher(Twist, 'turtle1/cmd_vel', 10)
+        self.pub2 = self.create_publisher(Twist, 'turtle2/cmd_vel', 10)
         self.msg = Twist()
+        self.msg2 =Twist()
         self.ptime = time.time()
         
     def pub_callback(self):
         self.pub.publish(self.msg)
+        self.pub2.publish(self.msg2)
 
     def update_callback(self):
         # create your idea
@@ -30,6 +33,9 @@ class Move_turtle(Node):
             self.msg.angular.z = 2.0
         else:
             self.ptime = time.time()
+        # update self.msg2
+        self.msg2.linear.x = 2.0
+        self.msg2.angular.z = 2.0
         
 
 def main():
