@@ -11,11 +11,11 @@ class T_sub(Node):
         self.create_subscription(String, 'str', self.sub_m_callback, 10)
 
     def sub_callback(self, msg: Header):
-        print(msg.frame_id)
-        print(f"Sec: {msg.stamp.sec}, Nanosec: {msg.stamp.nanosec}")
+        self.get_logger().info(msg.frame_id)
+        self.get_logger().info(f"Sec: {msg.stamp.sec}, Nanosec: {msg.stamp.nanosec}")
 
     def sub_m_callback(self, msg: String):
-        print('Incomming Data: ',msg.data)
+        self.get_logger().info(f'Incomming Data: {msg.data}')
 
 def main():
     rclpy.init()
