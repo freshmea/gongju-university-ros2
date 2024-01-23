@@ -11,12 +11,20 @@ def generate_launch_description():
         'param_dir',
         default=os.path.join(get_package_share_directory('gongju_ros'), 'param', 'turtlesim.yaml')
     )
+    myparam =  LaunchConfiguration(
+        'myparam',
+        default=os.path.join(get_package_share_directory('gongju_ros'), 'param', 'myparam.yaml')
+    )
 
     return LaunchDescription(
         [
             DeclareLaunchArgument(
                 'param_dir',
                 default_value=param_dir
+            ),
+            DeclareLaunchArgument(
+                'myparam',
+                default_value=myparam
             ),
             Node(
                 package='turtlesim',
@@ -34,6 +42,7 @@ def generate_launch_description():
             Node(
                 package='gongju_ros',
                 executable='move_turtlesim',
+                parameters=[myparam],
                 output='screen',
                 ),
         ]
