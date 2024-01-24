@@ -1,5 +1,7 @@
 import rclpy
 from rclpy.node import Node
+from rclpy.qos import QoSProfile
+from rclpy.qos import QoSHistoryPolicy, QoSDurabilityPolicy, QoSReliabilityPolicy
 from std_msgs.msg import String
 from my_interface.msg import MyTopic
 
@@ -8,8 +10,15 @@ class Simple_pub(Node):
     def __init__(self):
         super().__init__("simple_pub")  # type: ignore
         self.create_timer(1, self.print_callback)
-        self.pub = self.create_publisher(String, "str", 10)
-        self.pub2 = self.create_publisher(MyTopic, "my_topic", 10)
+        self.qos_profile = QoSProfile(
+            history=QoSHistoryPolicy.KEEP_LAST,
+            reliability=QoSReliabilityPolicy.BEST_EFFORT,
+            durability=QoSDurabilityPolicy.VOLATILE,
+            depth=10,
+        )
+
+        self.pub = self.create_publisher(String, "str", self.qos_profile)
+        self.pub2 = self.create_publisher(MyTopic, "my_topic", self.qos_profile)
 
     def print_callback(self):
         msg = String()
