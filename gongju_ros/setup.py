@@ -34,6 +34,7 @@ setup(
             "move_turtlebot_s = gongju_ros.move_turtlebot_s:main",
             "simple_image_sub = gongju_ros.simple_image_sub:main",
             "simple_service_server = gongju_ros.simple_service_server:main",
+            "simple_service_client = gongju_ros.simple_service_client:main",
         ],
     },
 )
