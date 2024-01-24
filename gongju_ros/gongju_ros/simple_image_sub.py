@@ -15,6 +15,7 @@ class Simple_sub_image(Node):
 
     def img_callback(self, msg: CompressedImage):
         self.frame = self.cb.compressed_imgmsg_to_cv2(msg)
+        self.frame = cv2.Canny(self.frame, 50, 100)
         cv2.imshow("img", self.frame)
         cv2.waitKey(1)
 
