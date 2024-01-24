@@ -37,10 +37,6 @@ class Move_turtle(Node):
 
     def update_callback(self):
         # create your idea
-        # self.msg.angular.z = 2.0
-        # self.msg.linear.x += 0.01
-        # if self.msg.linear.x > 10:
-        #     self.msg.linear.x = 0.0
         print(self.scan.ranges[359])
         if 0.1 < self.scan.ranges[359] < 0.5:
             self.msg.linear.x = 0.0

@@ -32,6 +32,7 @@ setup(
             "simple_time_pub = gongju_ros.simple_time_pub:main",
             "simple_time_sub = gongju_ros.simple_time_sub:main",
             "move_turtlebot_s = gongju_ros.move_turtlebot_s:main",
+            "simple_image_sub = gongju_ros.simple_image_sub:main",
         ],
     },
 )
