@@ -3,6 +3,7 @@ from rclpy.node import Node
 from geometry_msgs.msg import Twist
 import time
 from rcl_interfaces.msg import SetParametersResult
+from rclpy.parameter import Parameter
 
 
 class Move_turtle(Node):
@@ -18,12 +19,14 @@ class Move_turtle(Node):
         self.ptime = time.time()
         self.declare_parameter("myparam", "My node default parameter")
         self.myparam = self.get_parameter("myparam").value
-        # self.add_on_set_parameters_callback(self.setparam)
         self.add_on_set_parameters_callback(self.setparam)
 
-    def setparam(self, param):
-        self.myparam = param[0].value
-        return SetParametersResult(successful=True)
+    def setparam(self, params: list[Parameter]):
+        for param in params:
+            if param.name == "myparam":
+                self.myparam = param.value
+                return SetParametersResult(successful=True)
+        return SetParametersResult(successful=False)
 
     def pub_callback(self):
         self.pub.publish(self.msg)

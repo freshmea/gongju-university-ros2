@@ -16,6 +16,7 @@ find_package(rosidl_default_generators REQUIRED)
 rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/MyTopic.msg"
   "srv/Mysrv.srv"
+  "action/Fibonacci.action"
   DEPENDENCIES builtin_interfaces
 )
 if(BUILD_TESTING)
