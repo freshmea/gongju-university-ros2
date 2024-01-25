@@ -42,6 +42,7 @@ def main(args=None):
     node = Fibonacci_action_client()  # type: ignore
     try:
         node.send_goal(sys.argv[1])
+        rclpy.spin(node)
     except KeyboardInterrupt:
         node.destroy_node()
 
