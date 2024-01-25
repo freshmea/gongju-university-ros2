@@ -2,6 +2,8 @@ import rclpy
 from rclpy.node import Node
 from rclpy.action import ActionClient
 from my_interface.action import Fibonacci
+from rclpy.task import Future
+from rclpy.action.client import ClientGoalHandle
 import sys
 
 
@@ -22,18 +24,18 @@ class Fibonacci_action_client(Node):
     def feedback_callback(self, feedback_msg):
         self.get_logger().info(f"Feedback: {feedback_msg.feedback.temp_seq}")
 
-    def goal_response_callback(self, future):
-        goal_handle = future.result()
+    def goal_response_callback(self, future: Future):
+        goal_handle: ClientGoalHandle = future.result()  # type: ignore
         if not goal_handle.accepted:
             self.get_logger().info("Goal Rejected")
             return
         self.get_logger().info("Goal Accepted")
-        self.get_result_future = goal_handle.get_result_async()
+        self.get_result_future: Future = goal_handle.get_result_async()
         self.get_result_future.add_done_callback(self.get_result_callback)
         self.get_logger().info("Goal Sent")
 
-    def get_result_callback(self, future):
-        result = future.result().result
+    def get_result_callback(self, future: Future):
+        result = future.result().result  # type: ignore
         self.get_logger().info(f"Result: {result.seq}")
 
 

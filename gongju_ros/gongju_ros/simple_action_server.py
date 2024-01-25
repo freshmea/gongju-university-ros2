@@ -2,6 +2,7 @@ import rclpy
 from rclpy.node import Node
 from rclpy.action import ActionServer
 from my_interface.action import Fibonacci
+from rclpy.action.server import ServerGoalHandle
 import time
 
 
@@ -12,13 +13,11 @@ class Fibonacci_action_server(Node):
             self, Fibonacci, "fibonacci", self.execute_callback
         )
 
-    def execute_callback(self, goal_handle):
+    def execute_callback(self, goal_handle: ServerGoalHandle):
         feedback_msg = Fibonacci.Feedback()
         feedback_msg.temp_seq = [0, 1]
         result = Fibonacci.Result()
-
         self.get_logger().info(f"Goal: {goal_handle.request.step} Accepted")
-
         for i in range(1, goal_handle.request.step):
             feedback_msg.temp_seq.append(
                 feedback_msg.temp_seq[i - 1] + feedback_msg.temp_seq[i]
