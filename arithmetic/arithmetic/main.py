@@ -5,6 +5,7 @@ from rclpy.qos import QoSProfile
 from my_interface.msg import ArithmeticArgument
 from my_interface.srv import ArithmeticOperator
 from rclpy.callback_groups import ReentrantCallbackGroup
+from rclpy.executors import MultiThreadedExecutor
 
 
 class Calculator(Node):
@@ -23,6 +24,7 @@ class Calculator(Node):
         )
         self.argument_a = 0.0
         self.argument_b = 0.0
+        self.operator_symbol = ["+", "-", "*", "/"]
 
     def argument_callback(self, msg: ArithmeticArgument):
         self.argument_a = msg.argument_a
@@ -32,7 +34,9 @@ class Calculator(Node):
 
     def operator_callback(self, request, response):
         self.get_logger().info("Incoming request")
-        self.get_logger().info(f"Operator: {request.arithmetic_operator}")
+        self.get_logger().info(
+            f"Operator: {self.operator_symbol[request.arithmetic_operator-1]}"
+        )
         if request.arithmetic_operator == ArithmeticOperator.Request.PLUS:
             response.arithmetic_result = self.argument_a + self.argument_b
         elif request.arithmetic_operator == ArithmeticOperator.Request.MINUS:
@@ -51,8 +55,10 @@ class Calculator(Node):
 def main():
     rclpy.init()
     node = Calculator()  # type: ignore
+    executor = MultiThreadedExecutor(num_threads=4)
+    executor.add_node(node)
     try:
-        rclpy.spin(node)
+        executor.spin()
     except KeyboardInterrupt:
         node.destroy_node()
 
