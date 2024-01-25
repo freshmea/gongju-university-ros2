@@ -36,6 +36,7 @@ setup(
             "simple_service_server = gongju_ros.simple_service_server:main",
             "simple_service_client = gongju_ros.simple_service_client:main",
             "simple_action_server = gongju_ros.simple_action_server:main",
+            "simple_action_client = gongju_ros.simple_action_client:main",
         ],
     },
 )
