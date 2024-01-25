@@ -21,6 +21,7 @@ setup(
         "console_scripts": [
             "arg = arithmetic.arg:main",
             "main = arithmetic.main:main",
+            "operator = arithmetic.operator:main",
         ],
     },
 )
