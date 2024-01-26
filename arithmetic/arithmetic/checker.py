@@ -5,6 +5,7 @@ from my_interface.action import ArithmeticChecker
 from rclpy.task import Future
 from rclpy.action.client import ClientGoalHandle
 import sys
+import argparse
 
 
 class Checker(Node):
@@ -41,11 +42,21 @@ class Checker(Node):
         self.get_logger().info(f"Result: {result.all_formula} {result.total_sum}")
 
 
-def main(args=None):
-    rclpy.init(args=args)
+def main(argv=sys.argv[1:]):
+    parser = argparse.ArgumentParser(
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter
+    )
+    parser.add_argument(
+        "-g", "--goal_total_sum", help="Goal Sum", default=100, type=float
+    )
+    parser.add_argument(
+        "argv", nargs=argparse.REMAINDER, help="Remapping arguments for ROS"
+    )
+    args = parser.parse_args()
+    rclpy.init(args=args.argv)
     node = Checker()  # type: ignore
     try:
-        node.send_goal(sys.argv[1])
+        node.send_goal(args.goal_total_sum)
         rclpy.spin(node)
     except KeyboardInterrupt:
         node.destroy_node()
