@@ -47,7 +47,6 @@ class Calculator(Node):
         self.argument_b = msg.argument_b
         self.get_logger().info(f"Argument A: {self.argument_a}")
         self.get_logger().info(f"Argument B: {self.argument_b}")
-        self.argument_formula = f"{self.argument_a} {self.argument_operator} {self.argument_b} = {self.argument_result}"
         if self.argument_operator_n == 1:
             self.argument_result = self.argument_a + self.argument_b
         elif self.argument_operator_n == 2:
@@ -59,6 +58,7 @@ class Calculator(Node):
                 self.argument_result = self.argument_a / self.argument_b
             else:
                 self.argument_result = 0.0
+        self.argument_formula = f"{self.argument_a} {self.operator_symbol[self.argument_operator_n-1]} {self.argument_b} = {self.argument_result}"
         self.get_logger().info(self.argument_formula)
         self.get_logger().info(str(self.argument_result))
 
