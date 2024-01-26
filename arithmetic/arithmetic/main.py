@@ -37,7 +37,7 @@ class Calculator(Node):
         self.argument_a = 0.0
         self.argument_b = 0.0
         self.argument_result = 0.0
-        self.argument_fomula = ""
+        self.argument_formula = ""
         self.operator_symbol = ["+", "-", "*", "/"]
         self.argument_operator = self.operator_symbol[1]
 
@@ -46,10 +46,12 @@ class Calculator(Node):
         self.argument_b = msg.argument_b
         self.get_logger().info(f"Argument A: {self.argument_a}")
         self.get_logger().info(f"Argument B: {self.argument_b}")
-        self.arrument_formula = f"{self.argument_a} {self.argument_operator} {self.argument_b} = {self.argument_result}"
+        self.argument_formula = f"{self.argument_a} {self.argument_operator} {self.argument_b} = {self.argument_result}"
         self.argument_result = eval(
             f"{self.argument_a} {self.argument_operator} {self.argument_b}"
         )
+        self.get_logger().info(self.argument_formula)
+        self.get_logger().info(self.argument_result)
 
     def operator_callback(self, request, response):
         self.get_logger().info("Incoming request")
