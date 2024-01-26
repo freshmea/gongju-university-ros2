@@ -39,18 +39,22 @@ class Calculator(Node):
         self.argument_result = 0.0
         self.argument_fomula = ""
         self.operator_symbol = ["+", "-", "*", "/"]
+        self.argument_operator = self.operator_symbol[1]
 
     def argument_callback(self, msg: ArithmeticArgument):
         self.argument_a = msg.argument_a
         self.argument_b = msg.argument_b
         self.get_logger().info(f"Argument A: {self.argument_a}")
         self.get_logger().info(f"Argument B: {self.argument_b}")
+        self.arrument_formula = f"{self.argument_a} {self.argument_operator} {self.argument_b} = {self.argument_result}"
+        self.argument_result = 0.0
 
     def operator_callback(self, request, response):
         self.get_logger().info("Incoming request")
         self.get_logger().info(
             f"Operator: {self.operator_symbol[request.arithmetic_operator-1]}"
         )
+        self.argument_operator = self.operator_symbol[request.arithmetic_operator - 1]
         if request.arithmetic_operator == ArithmeticOperator.Request.PLUS:
             self.argument_result = self.argument_a + self.argument_b
         elif request.arithmetic_operator == ArithmeticOperator.Request.MINUS:
@@ -62,10 +66,10 @@ class Calculator(Node):
                 self.argument_result = self.argument_a / self.argument_b
             else:
                 self.argument_result = 0.0
-        self.arithmetic_fomula = f"{self.argument_a} {self.operator_symbol[request.arithmetic_operator-1]} {self.argument_b} = {self.argument_result}"
+        self.argument_fomula = f"{self.argument_a} {self.argument_operator} {self.argument_b} = {self.argument_result}"
         response.arithmetic_result = self.argument_result
 
-        self.get_logger().info(f"Result: {self.arithmetic_fomula}")
+        self.get_logger().info(f"Result: {self.argument_fomula}")
         return response
 
     def checker_callback(self, goal_handle: ServerGoalHandle):
@@ -75,7 +79,7 @@ class Calculator(Node):
         goal_sum = goal_handle.request.goal_sum
         while total_sum < goal_sum:
             total_sum += self.argument_result
-            feedback_msg.formula.append(self.arithmetic_fomula)
+            feedback_msg.formula.append(self.argument_fomula)
             goal_handle.publish_feedback(feedback_msg)
             time.sleep(1)
         goal_handle.succeed()
