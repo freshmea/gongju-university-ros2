@@ -19,6 +19,7 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "srv/Mysrv.srv"
   "srv/ArithmeticOperator.srv"
   "action/Fibonacci.action"
+  "action/ArithmeticChecker.action"
   DEPENDENCIES builtin_interfaces
 )
 if(BUILD_TESTING)

@@ -2,10 +2,14 @@ import random
 import rclpy
 from rclpy.node import Node
 from rclpy.qos import QoSProfile
+
 from my_interface.msg import ArithmeticArgument
 from my_interface.srv import ArithmeticOperator
+from my_interface.action import ArithmeticChecker
+
 from rclpy.callback_groups import ReentrantCallbackGroup
 from rclpy.executors import MultiThreadedExecutor
+from rclpy.action import ActionServer
 
 
 class Calculator(Node):
@@ -22,8 +26,17 @@ class Calculator(Node):
             qos_profile=qos_profile,
             callback_group=ReentrantCallbackGroup(),
         )
+        self.arithmetic_actino_server = ActionServer(
+            self,
+            ArithmeticChecker,
+            "checker",
+            self.checker_callback,
+            callback_group=ReentrantCallbackGroup(),
+        )
         self.argument_a = 0.0
         self.argument_b = 0.0
+        self.argument_result = 0.0
+        self.argument_fomula = ""
         self.operator_symbol = ["+", "-", "*", "/"]
 
     def argument_callback(self, msg: ArithmeticArgument):
@@ -38,18 +51,29 @@ class Calculator(Node):
             f"Operator: {self.operator_symbol[request.arithmetic_operator-1]}"
         )
         if request.arithmetic_operator == ArithmeticOperator.Request.PLUS:
-            response.arithmetic_result = self.argument_a + self.argument_b
+            self.argument_result = self.argument_a + self.argument_b
         elif request.arithmetic_operator == ArithmeticOperator.Request.MINUS:
-            response.arithmetic_result = self.argument_a - self.argument_b
+            self.argument_result = self.argument_a - self.argument_b
         elif request.arithmetic_operator == ArithmeticOperator.Request.MULTIPLY:
-            response.arithmetic_result = self.argument_a * self.argument_b
+            self.argument_result = self.argument_a * self.argument_b
         elif request.arithmetic_operator == ArithmeticOperator.Request.DIVIDE:
             if self.argument_b != 0.0:
-                response.arithmetic_result = self.argument_a / self.argument_b
+                self.argument_result = self.argument_a / self.argument_b
             else:
-                response.arithmetic_result = 0.0
-        self.get_logger().info(f"Result: {response.arithmetic_result}")
+                self.argument_result = 0.0
+        self.arithmetic_fomula = f"{self.argument_a} {self.operator_symbol[request.arithmetic_operator-1]} {self.argument_b} = {self.argument_result}"
+        response.arithmetic_result = self.argument_result
+
+        self.get_logger().info(f"Result: {self.arithmetic_fomula}")
         return response
+
+    def checker_callback(self, goal_handle):
+        feedback_msg = ArithmeticChecker.Feedback()
+        feedback_msg.formula = []
+        total_sum = 0.0
+        goal_sum = goal_handle.request.goal_sum
+        while total_sum < goal_sum:
+            total_sum += self.argument_result
 
 
 def main():
