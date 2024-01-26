@@ -1,4 +1,4 @@
-import random
+import random, time
 import rclpy
 from rclpy.node import Node
 from rclpy.qos import QoSProfile
@@ -10,6 +10,7 @@ from my_interface.action import ArithmeticChecker
 from rclpy.callback_groups import ReentrantCallbackGroup
 from rclpy.executors import MultiThreadedExecutor
 from rclpy.action import ActionServer
+from rclpy.action.server import ServerGoalHandle
 
 
 class Calculator(Node):
@@ -67,13 +68,21 @@ class Calculator(Node):
         self.get_logger().info(f"Result: {self.arithmetic_fomula}")
         return response
 
-    def checker_callback(self, goal_handle):
+    def checker_callback(self, goal_handle: ServerGoalHandle):
         feedback_msg = ArithmeticChecker.Feedback()
         feedback_msg.formula = []
         total_sum = 0.0
         goal_sum = goal_handle.request.goal_sum
         while total_sum < goal_sum:
             total_sum += self.argument_result
+            feedback_msg.formula.append(self.arithmetic_fomula)
+            goal_handle.publish_feedback(feedback_msg)
+            time.sleep(1)
+        goal_handle.succeed()
+        result = ArithmeticChecker.Result()
+        result.all_formula = feedback_msg.formula
+        result.total_sum = total_sum
+        return result
 
 
 def main():

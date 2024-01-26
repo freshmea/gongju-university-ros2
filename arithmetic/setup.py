@@ -26,6 +26,7 @@ setup(
             "arg = arithmetic.arg:main",
             "main = arithmetic.main:main",
             "operator = arithmetic.operator:main",
+            "checker = arithmetic.checker:main",
         ],
     },
 )
