@@ -47,7 +47,9 @@ class Calculator(Node):
         self.get_logger().info(f"Argument A: {self.argument_a}")
         self.get_logger().info(f"Argument B: {self.argument_b}")
         self.arrument_formula = f"{self.argument_a} {self.argument_operator} {self.argument_b} = {self.argument_result}"
-        self.argument_result = 0.0
+        self.argument_result = eval(
+            f"{self.argument_a} {self.argument_operator} {self.argument_b}"
+        )
 
     def operator_callback(self, request, response):
         self.get_logger().info("Incoming request")

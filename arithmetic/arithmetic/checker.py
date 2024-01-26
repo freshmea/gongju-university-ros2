@@ -14,7 +14,7 @@ class Checker(Node):
 
     def send_goal(self, goal_sum):
         goal_msg = ArithmeticChecker.Goal()
-        goal_msg.goal_sum = int(goal_sum)
+        goal_msg.goal_sum = float(goal_sum)
         while not self.action_client.wait_for_server(timeout_sec=0.5):
             self.get_logger().info("Waiting for Server")
 
@@ -24,7 +24,7 @@ class Checker(Node):
         self.send_goal_future.add_done_callback(self.goal_response_callback)
 
     def feedback_callback(self, feedback_msg):
-        self.get_logger().info(f"Feedback: {feedback_msg.feedback.fomula}")
+        self.get_logger().info(f"Feedback: {feedback_msg.feedback.formula}")
 
     def goal_response_callback(self, future: Future):
         goal_handle: ClientGoalHandle = future.result()  # type: ignore
@@ -38,7 +38,7 @@ class Checker(Node):
 
     def get_result_callback(self, future: Future):
         result = future.result().result  # type: ignore
-        self.get_logger().info(f"Result: {result.all_fomula} {result.total_sum}")
+        self.get_logger().info(f"Result: {result.all_formula} {result.total_sum}")
 
 
 def main(args=None):
